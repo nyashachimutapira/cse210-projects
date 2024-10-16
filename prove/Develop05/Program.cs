@@ -1,66 +1,107 @@
-// Base class for Assignment
-public class Assignment
-{
-    private string _studentName;
-    private string _topic;
+using System;
+using System.Threading;
 
-    public Assignment(string studentName, string topic)
+// Base class for all activities
+public abstract class MindfulnessActivity
+{
+    protected string name;
+    protected string description;
+
+    public MindfulnessActivity(string name, string description)
     {
-        _studentName = studentName;
-        _topic = topic;
+        this.name = name;
+        this.description = description;
     }
 
-    public string GetSummary()
+    public abstract void StartActivity();
+    public abstract void EndActivity();
+}
+
+// Breathing Activity class
+public class BreathingActivity : MindfulnessActivity
+{
+    public BreathingActivity(string name, string description) : base(name, description) {}
+
+    public override void StartActivity()
     {
-        return $"{_studentName} - {_topic}";
+        Console.WriteLine($"Starting {name}: {description}");
+    }
+
+    public override void EndActivity()
+    {
+        Console.WriteLine($"Ending {name}");
     }
 }
 
-// MathAssignment class inheriting from Assignment
-public class MathAssignment : Assignment
+// Reflection Activity class
+public class ReflectionActivity : MindfulnessActivity
 {
-    private string _textbookSection;
-    private string _problems;
+    public ReflectionActivity(string name, string description) : base(name, description) {}
 
-    public MathAssignment(string studentName, string topic, string textbookSection, string problems) : base(studentName, topic)
+    public override void StartActivity()
     {
-        _textbookSection = textbookSection;
-        _problems = problems;
+        Console.WriteLine($"Starting {name}: {description}");
     }
 
-    public string GetHomeworkList()
+    public override void EndActivity()
     {
-        return $"Section {_textbookSection} Problems {_problems}";
+        Console.WriteLine($"Ending {name}");
     }
 }
 
-// WritingAssignment class inheriting from Assignment
-public class WritingAssignment : Assignment
+// Listing Activity class
+public class ListingActivity : MindfulnessActivity
 {
-    private string _title;
+    public ListingActivity(string name, string description) : base(name, description) {}
 
-    public WritingAssignment(string studentName, string topic, string title) : base(studentName, topic)
+    public override void StartActivity()
     {
-        _title = title;
+        Console.WriteLine($"Starting {name}: {description}");
     }
 
-    public string GetWritingInformation()
+    public override void EndActivity()
     {
-        return $"{_title} by {GetSummary()}";
+        Console.WriteLine($"Ending {name}");
     }
 }
 
-// Testing the classes
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        MathAssignment mathAssignment = new MathAssignment("Roberto Rodriguez", "Fractions", "7.3", "8-19");
-        Console.WriteLine(mathAssignment.GetSummary());
-        Console.WriteLine(mathAssignment.GetHomeworkList());
+        // Create instances of the mindfulness activities
+        MindfulnessActivity breathingActivity = new BreathingActivity("Breathing Exercise", "Focus on your breath");
+        MindfulnessActivity reflectionActivity = new ReflectionActivity("Reflection Exercise", "Reflect on your thoughts");
+        MindfulnessActivity listingActivity = new ListingActivity("Listing Exercise", "List things you are grateful for");
 
-        WritingAssignment writingAssignment = new WritingAssignment("Mary Waters", "European History", "The Causes of World War II");
-        Console.WriteLine(writingAssignment.GetSummary());
-        Console.WriteLine(writingAssignment.GetWritingInformation());
+        // Start and end each activity with pauses and animations
+        breathingActivity.StartActivity();
+        Thread.Sleep(3000); // Pause for 3 seconds
+        Console.WriteLine("Let's take a deep breath in...");
+        Thread.Sleep(3000); // Pause for 3 seconds
+        Console.WriteLine("...and slowly exhale.");
+        Thread.Sleep(3000); // Pause for 3 seconds
+        breathingActivity.EndActivity();
+
+        reflectionActivity.StartActivity();
+        for (int i = 3; i > 0; i--)
+        {
+            Console.Write(i);
+            Thread.Sleep(1000);
+            Console.Write("\b \b"); // Erase the number
+        }
+        Console.WriteLine("Reflect on your thoughts...");
+        Thread.Sleep(5000); // Pause for 5 seconds
+        reflectionActivity.EndActivity();
+
+        listingActivity.StartActivity();
+        DateTime startTime = DateTime.Now;
+        DateTime futureTime = startTime.AddSeconds(10);
+        while (DateTime.Now < futureTime)
+        {
+            Console.WriteLine("Listing things you are grateful for...");
+            Thread.Sleep(1000); // Pause for 1 second
+        }
+        listingActivity.EndActivity();
     }
 }
