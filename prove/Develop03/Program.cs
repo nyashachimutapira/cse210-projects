@@ -1,109 +1,25 @@
 using System;
-using System.Collections.Generic;
-
-public class Scripture
-{
-    public string Reference { get; }
-    public string Text { get; }
-    private List<string> hiddenWords;
-
-    public Scripture(string reference, string text)
-    {
-        Reference = reference;
-        Text = text;
-        hiddenWords = new List<string>();
-    }
-
-    public void HideWords()
-    {
-        string[] words = Text.Split(' ');
-        Random random = new Random();
-        int numWordsToHide = random.Next(1, words.Length);
-
-        for (int i = 0; i < numWordsToHide; i++)
-        {
-            int wordIndex = random.Next(0, words.Length);
-            if (!hiddenWords.Contains(words[wordIndex]))
-            {
-                hiddenWords.Add(words[wordIndex]);
-                words[wordIndex] = new string('_', words[wordIndex].Length);
-            }
-        }
-
-        Console.WriteLine($"{Reference}:");
-        Console.WriteLine(string.Join(" ", words));
-    }
-
-    public bool AllWordsHidden()
-    {
-        return hiddenWords.Count == Text.Split(' ').Length;
-    }
-}
-
-public class Reference
-{
-    public string Book { get; }
-    public int Chapter { get; }
-    public int VerseStart { get; }
-    public int VerseEnd { get; }
-
-    public Reference(string book, int chapter, int verseStart)
-    {
-        Book = book;
-        Chapter = chapter;
-        VerseStart = verseStart;
-        VerseEnd = verseStart;
-    }
-
-    public Reference(string book, int chapter, int verseStart, int verseEnd)
-    {
-        Book = book;
-        Chapter = chapter;
-        VerseStart = verseStart;
-        VerseEnd = verseEnd;
-    }
-
-    public override string ToString()
-    {
-        if (VerseStart == VerseEnd)
-        {
-            return $"{Book} {Chapter}:{VerseStart}";
-        }
-        else
-        {
-            return $"{Book} {Chapter}:{VerseStart}-{VerseEnd}";
-        }
-    }
-}
-
-public class Word
-{
-    public string Text { get; }
-
-    public Word(string text)
-    {
-        Text = text;
-    }
-}
 
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        Scripture scripture = new Scripture("John 3:16", "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.");
+        Reference reference = new Reference("John", 3, 16);
+        Scripture scripture = new Scripture(reference, "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.");
 
-        Console.WriteLine("Press Enter to start or type 'quit' to exit.");
-        string userInput = Console.ReadLine();
-
-        while (userInput != "quit" && !scripture.AllWordsHidden())
+        while (!scripture.AllWordsHidden())
         {
             Console.Clear();
-            scripture.HideWords();
+            Console.WriteLine(scripture);
+            Console.WriteLine("\nPress Enter to continue or type 'quit' to exit:");
 
-            Console.WriteLine("Press Enter to hide more words or type 'quit' to exit.");
-            userInput = Console.ReadLine();
+            string input = Console.ReadLine();
+            if (input.ToLower() == "quit")
+                break;
+
+            scripture.HideRandomWords(3);
         }
 
-        Console.WriteLine("End of Program.");
+        Console.WriteLine("\nThank you for using the Scripture Memorizer!");
     }
 }
