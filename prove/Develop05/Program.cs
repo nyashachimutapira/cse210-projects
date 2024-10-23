@@ -1,34 +1,48 @@
 using System;
-using MindfulnessProgram;
 
-while (true)
+/// <summary>
+/// Entry point for the Mindfulness Program.
+/// </summary>
+class Program
 {
-    Console.Clear();
-    Console.WriteLine("Mindfulness Program");
-    Console.WriteLine("1. Start Breathing Activity");
-    Console.WriteLine("2. Start Reflection Activity");
-    Console.WriteLine("3. Start Listing Activity");
-    Console.WriteLine("4. Quit");
-    Console.Write("Select a choice from the menu: ");
-
-    string choice = Console.ReadLine();
-
-    switch (choice)
+    static void Main(string[] args)
     {
-        case "1":
-            new BreathingActivity().Run();
-            break;
-        case "2":
-            new ReflectionActivity().Run();
-            break;
-        case "3":
-            new ListingActivity().Run();
-            break;
-        case "4":
-            return;
-        default:
-            Console.WriteLine("Invalid choice. Please try again.");
-            System.Threading.Thread.Sleep(2000);
-            break;
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to the Mindfulness Program!");
+            Console.WriteLine("Choose an activity:");
+            Console.WriteLine("1. Breathing Activity");
+            Console.WriteLine("2. Reflection Activity");
+            Console.WriteLine("3. Listing Activity");
+            Console.WriteLine("4. Exit");
+            Console.Write("Select an option: ");
+
+            string choice = Console.ReadLine();
+            Activity activity = null;
+
+            switch (choice)
+            {
+                case "1":
+                    activity = new BreathingActivity();
+                    break;
+                case "2":
+                    activity = new ReflectionActivity();
+                    break;
+                case "3":
+                    activity = new ListingActivity();
+                    break;
+                case "4":
+                    Console.WriteLine("Thank you for using the Mindfulness Program. Goodbye!");
+                    return;
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    continue;
+            }
+
+            activity.Execute();
+            Console.WriteLine("Press any key to return to the menu...");
+            Console.ReadKey();
+        }
     }
 }
